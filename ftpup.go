@@ -16,6 +16,7 @@ var (
 	hostPort    = flag.String("l", "localhost:15201", "hostport to listen on")
 	ftpHostPort = flag.String("p", "ftp.ncbi.nlm.nih.gov:21", "ftp host to proxy to")
 	ftpTimeout  = flag.Duration("T", 10*time.Second, "ftp timeout")
+	maxInflight = flag.Int("X", 3, "max requests in flight at the same time")
 )
 
 // UserPassword allows to pass in user:password in flags.
@@ -46,10 +47,16 @@ type server struct {
 	ftpTimeout  time.Duration
 	ftpUsername string
 	ftpPassword string
+
+	sem chan bool // bounded concurrency, imposing a minimal limit
 }
 
 // ServeHTTP proxies requests to FTP, only single path supported.
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.sem <- true
+	defer func() {
+		<-s.sem
+	}()
 	path := r.URL.Path
 	log.Printf("retrieving %v", path)
 	c, err := ftp.Dial(s.ftpHostPort, ftp.DialWithTimeout(s.ftpTimeout))
@@ -57,11 +64,16 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = c.Login("anonymous", "anonymous")
-	if err != nil {
+	if err = c.Login(ftpUsername, ftpPassword); err != nil {
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
 	}
+	defer func() {
+		if err := c.Quit(); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}()
 	resp, err := c.Retr(path)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -92,6 +104,7 @@ func main() {
 		ftpTimeout:  *ftpTimeout,
 		ftpUsername: ftpUserPass.User,
 		ftpPassword: ftpUserPass.Password,
+		sem:         make(chan bool, *maxInflight),
 	}
 	log.Printf("starting ftpup on http://%v", *hostPort)
 	log.Fatal(http.ListenAndServe(*hostPort, srv))

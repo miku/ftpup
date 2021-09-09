@@ -21,7 +21,9 @@ clean:
 .PHONY: deb
 deb: all
 	mkdir -p packaging/deb/$(PKGNAME)/usr/local/bin
+	mkdir -p packaging/deb/$(PKGNAME)/etc/systemd/user
 	cp $(TARGETS) packaging/deb/$(PKGNAME)/usr/local/bin
+	cp ftpup.service packaging/deb/$(PKGNAME)/etc/systemd/user
 	cd packaging/deb && fakeroot dpkg-deb --build $(PKGNAME) .
 	mv packaging/deb/$(PKGNAME)_*.deb .
 

@@ -1,0 +1,8 @@
+[Unit]
+Description=ftpup
+
+[Service]
+ExecStart=/usr/local/bin/ftpup
+
+[Install]
+WantedBy=multi-user.target
