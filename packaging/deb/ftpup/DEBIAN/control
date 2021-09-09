@@ -1,0 +1,9 @@
+Package: ftpup
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Essential: no
+Depends: libc6 (>= 2.12)
+Maintainer: Martin Czygan <martin@archive.org>
+Description: Proxy single files from FTP over HTTP.
