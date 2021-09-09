@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -17,6 +18,10 @@ var (
 	ftpHostPort = flag.String("p", "ftp.ncbi.nlm.nih.gov:21", "ftp host to proxy to")
 	ftpTimeout  = flag.Duration("T", 10*time.Second, "ftp timeout")
 	maxInflight = flag.Int("X", 3, "max requests in flight at the same time")
+	showVersion = flag.Bool("version", false, "show version")
+
+	Version   string
+	Buildtime string
 )
 
 // UserPassword allows to pass in user:password in flags.
@@ -95,6 +100,10 @@ func main() {
 	}
 	flag.Var(&ftpUserPass, "u", "username and password")
 	flag.Parse()
+	if *showVersion {
+		fmt.Printf("ftpup %s %s\n", Version, Buildtime)
+		os.Exit(0)
+	}
 	srv := &server{
 		ftpHostPort: *ftpHostPort,
 		ftpTimeout:  *ftpTimeout,
