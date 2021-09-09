@@ -16,6 +16,7 @@ all: $(TARGETS)
 .PHONY: clean
 clean:
 	rm -f $(TARGETS)
+	rm -f $(PKGNAME).*deb
 
 .PHONY: deb
 deb: all
