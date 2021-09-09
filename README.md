@@ -3,6 +3,8 @@
 A tiny server serving files from FTP over HTTP. Written as a workaround for a
 (hopefully temporary) networking issue.
 
+One *ftpup* instance will proxy exactly one FTP server only.
+
 ![](ftp.png)
 
 ## Usage
@@ -22,7 +24,11 @@ Usage of ftpup:
         username and password (default anonymous:anonymous)
 ```
 
-After starting the server, you can request files by their path:
+After starting the server, you can request files by their path, e.g.
+[https://ftp.ncbi.nlm.nih.gov/pub/pmc/readme.txt](https://ftp.ncbi.nlm.nih.gov/pub/pmc/readme.txt)
+would be accessible as
+[http://localhost:15201/pub/pmc/readme.txt](http://localhost:15201/pub/pmc/readme.txt),
+etc.
 
 ```
 $ curl http://localhost:15201/pub/pmc/readme.txt
