@@ -86,10 +86,6 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Printf("successfully copied %d bytes from ftp://%s%s to %s", n, s.ftpHostPort, path, r.RemoteAddr)
-	if err := c.Quit(); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 }
 
 func main() {
