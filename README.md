@@ -10,6 +10,8 @@ $ ftpup -h
 Usage of ftpup:
   -T duration
         ftp timeout (default 10s)
+  -X int
+        max requests in flight at the same time (default 3)
   -l string
         hostport to listen on (default "localhost:15201")
   -p string
