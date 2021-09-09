@@ -3,6 +3,8 @@
 A tiny server serving files from FTP over HTTP. Written as a workaround for a
 (hopefully temporary) networking issue.
 
+![](ftp.png)
+
 ## Usage
 
 ```
