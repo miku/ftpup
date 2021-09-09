@@ -19,6 +19,8 @@ all: $(TARGETS)
 clean:
 	rm -f $(TARGETS)
 	rm -f $(PKGNAME)*deb
+	rm -fr packaging/deb/$(PKGNAME)/usr
+	rm -fr packaging/deb/$(PKGNAME)/etc
 
 .PHONY: deb
 deb: all
