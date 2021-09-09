@@ -1,9 +1,8 @@
 # FTPUP
 
 A tiny server serving files from FTP over HTTP. Written as a workaround for a
-(hopefully temporary) networking issue.
-
-One *ftpup* instance will proxy exactly one FTP server only.
+(hopefully temporary) networking issue. One *ftpup* instance will proxy exactly
+one FTP server only.
 
 ![](ftp.png)
 
