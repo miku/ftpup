@@ -64,7 +64,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err = c.Login(ftpUsername, ftpPassword); err != nil {
+	if err = c.Login(s.ftpUsername, s.ftpPassword); err != nil {
 		http.Error(w, err.Error(), http.StatusForbidden)
 		return
 	}
